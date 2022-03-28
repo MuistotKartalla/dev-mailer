@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+
+    function handleMail() {
+        let data = document.getElementById("div-data")
+        if (this.status === 200) {
+            let link = this.response.data
+            data.innerHTML = `<p><a href="${link}">${link}</a></p>`
+        } else {
+            data.innerHTML = '<p>No Data</p>'
+        }
+    }
+
+    function getMail() {
+        let r = new XMLHttpRequest()
+        r.onloadend = handleMail
+        r.responseType = 'json'
+        r.open('GET', `/get-mail?q=${window.encodeURI(document.getElementById('email-field').value)}`)
+        r.setRequestHeader('Authorization', document.getElementById('api-key').value)
+        r.send()
+    }
+
+</script>
+<head>
+    <title>Muistot Dev Mail Service</title>
+</head>
+<body>
+<div style="left: 50%; top: 50%; position: absolute; transform: translate(-50%, -50%);">
+    <div>
+        <table style="text-align: left; margin: 0; padding: 0">
+            <tr>
+                <td><label for="api-key">API Key</label></td>
+            </tr>
+            <tr>
+                <td><input id="api-key" type="text"></td>
+            </tr>
+            <tr>
+                <td><label for="email-field">Email or Username</label></td>
+            </tr>
+            <tr>
+                <td>
+                    <input id="email-field" type="email">
+                    <button onclick="getMail()">Get Mail</button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p>Received Data:</p>
+                    <div id="div-data"><p>No Data</p></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
